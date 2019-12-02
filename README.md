@@ -38,6 +38,7 @@ HTTP响应：
 
 ```
 {
+  sessionid:string,  // 唯一id，用来定位流查询问题 
   sdp:string   // answer sdp 
 }
 ```
@@ -79,6 +80,7 @@ HTTP响应：
 
 ```
 {
+  sessionid:string,  // 唯一id，用来定位流查询问题 
   sdp:string   // answer sdp 
 }
 ```
@@ -93,7 +95,17 @@ HTTP响应码：
 404:  该流不存在  
 ```
 
+
+## 鉴权
+
+URL: schema://domain:port/app/stream?query=xxxxxx
+
+推拉流的URL应当支持query参数， WebRTC-CDN中可以根据响应的query参数来做鉴权
+
+
 ## 流的保活
 
 WebRTC的流需要保活， WebRTC默认2.5s发送一次Stun Binding Request， 服务端可以监听此Bingding equest,  在5秒内没有收到此请求可以主动将流清理， 完成资源的释放。
 
+
+ 
