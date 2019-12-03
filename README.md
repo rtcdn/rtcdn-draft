@@ -103,6 +103,13 @@ URL: schema://domain:port/app/stream?query=xxxxxx
 推拉流的URL应当支持query参数， WebRTC-CDN中可以根据响应的query参数来做鉴权
 
 
+## 与RTMP的互通
+
+在设计的WebRTC的时候要考虑到对接原有的RTMP系统， WebRTC-CDN URL Schema 设计为与RTMP一致。 如果想要WebRTC系统和RTMP系统进行互通，CDN需要做音频的转码重采样和协议的转封装。
+在上行的WebRTC下行RTMP的时候，CDN需要把opus编码的音频转码为aac, WebRTC的的opus默认为48k采样率，RTMP中的AAC大多是44.1k采样率，这里需要重采样。相反RTMP协议转封装为WebRTC的过程中，
+需要把aac转码为opus， 并做重采样。
+
+
 ## 流的保活
 
 WebRTC的流需要保活， WebRTC默认2.5s发送一次Stun Binding Request， 服务端可以监听此Bingding equest,  在5秒内没有收到此请求可以主动将流清理， 完成资源的释放。
