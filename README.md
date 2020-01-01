@@ -3,6 +3,7 @@
 WebRTC CDN 集成规范
 
 
+
 ## 编解码能力
 
 WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑到跟RTMP互通, 视频编解码码限定支持H264 Baseline, 音频编解码限定支持OPUS.
@@ -38,7 +39,6 @@ HTTP响应：
 
 ```
 {
-  sessionid:string,  // 唯一id，用来定位流查询问题 
   sdp:string   // answer sdp 
 }
 ```
@@ -80,7 +80,6 @@ HTTP响应：
 
 ```
 {
-  sessionid:string,  // 唯一id，用来定位流查询问题 
   sdp:string   // answer sdp 
 }
 ```
@@ -101,6 +100,28 @@ HTTP响应码：
 URL: schema://domain:port/app/stream?query=xxxxxx
 
 推拉流的URL应当支持query参数， WebRTC-CDN中可以根据响应的query参数来做鉴权
+
+
+## 状态上报
+
+为了方便CDN调式定位流出现的问题，需要定时上报流的状态，状态上报设计为可选
+
+
+状态上报URL:  schema://domain:port/app/stream
+
+
+HTTP请求：
+
+method: POST
+body: 使用json编码
+
+
+```
+{
+  stats:json   // stats from peerconnection.getStats
+}
+```
+
 
 
 ## 与RTMP的互通
