@@ -9,7 +9,11 @@ WebRTC CDN 集成规范
 WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑到跟RTMP互通, 视频编解码码限定支持H264 Baseline, 音频编解码限定支持OPUS.
 
 
-## 请求URL说明
+
+
+
+## 推流设计
+
 
 WebRTC协议接入URL参考RTMP协议
 
@@ -53,6 +57,13 @@ HTTP响应码：
 409:  该流已经存在  
 ```
 
+
+## 拉流设计
+
+
+
+WebRTC协议接入URL参考RTMP协议
+
 ####  拉流URL
 
 URL: schema://domain:port/app/stream
@@ -95,14 +106,14 @@ HTTP响应码：
 ```
 
 
-## 鉴权
+## 鉴权设计
 
 URL: schema://domain:port/app/stream?query=xxxxxx
 
 推拉流的URL应当支持query参数， WebRTC-CDN中可以根据响应的query参数来做鉴权
 
 
-## 状态上报
+## 状态上报设计
 
 为了方便CDN调式定位流出现的问题，需要定时上报流的状态，状态上报设计为可选
 
@@ -121,6 +132,11 @@ body: 使用json编码
   stats:json   // stats from peerconnection.getStats
 }
 ```
+
+
+## 调度设计
+
+TBD
 
 
 
