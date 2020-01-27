@@ -18,7 +18,7 @@ WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑�
 如果上行为WebRTC， 下文中的streamurl可以做响应的改动，比如`webrtc://domain/live/streamid`
 
 
-#### 拉流
+### 拉流
 
 **拉流URL**
 
@@ -63,7 +63,7 @@ content-type: json
 ```
 
 
-#### 停止拉流
+### 停止拉流
 
 
 **停止拉流URL**
@@ -103,7 +103,7 @@ content-type: json
 ## WebRTC 推流设计
 
 
-#### 推流
+### 推流
 
 
 **推流URL**
@@ -153,7 +153,7 @@ content-type: json
 
 
 
-#### 停止推流
+### 停止推流
 
 
 **停止推流URL**
