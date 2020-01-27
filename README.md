@@ -1,6 +1,7 @@
 # rtcdn-draft
 
-WebRTC CDN 集成规范
+
+WebRTC 低延迟直播CDN集成规范
 
 
 
@@ -10,45 +11,137 @@ WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑�
 
 
 
+## WebRTC 拉流设计
+
+在WebRTC拉流的时候， 上行有可能是RTMP/WebRTC或者其他的协议，此部分以上行为RTMP输入为准进行设计。
+
+如果上行为WebRTC， 下文中的streamurl可以做响应的改动，比如`webrtc://domain/live/streamid`
 
 
-## 推流设计
+#### 拉流
 
+**拉流URL**
 
-WebRTC协议接入URL参考RTMP协议
-
-#### 推流URL
-
-URL: schema://domain:port/app/stream
+schema://domain:port/v1/play
 
 ```
 schema: http或者https
-app：跟rtmp协议中app对齐
-stream: 跟rtmp协议中的stream对齐
-```
-
-HTTP请求：
-
 method: POST
-body: 使用json编码
+content-type: json
+```
+
+**请求参数**
+
 
 ```
 {
-  type:"publish",
-  sdp:string   // offer sdp
+  streamurl: 'rtmp://domain/live/streamid',
+  sdp: string,  // offer sdp
+  clientip: string // 可选项， 在实际接入过程中，拉流请求有可能是服务端发起，为了更好的做就近调度，可以把客户端的ip地址当做参数，如果没有此clientip参数，CDN放可以用请求方的ip来做就近接入。
 }
 ```
 
-HTTP响应：
+
+
+**HTTP响应**
 
 ```
 {
-  sdp:string   // answer sdp 
+  sdp:string,   // answer sdp 
+  sessionid:string // 该路下行的唯一id
+}
+```
+
+**HTTP响应码**
+
+```
+200:  正常影响
+400:  请求不正确，URL 或者 参数不正确
+403:  鉴权失败
+404:  该流不存在
+500:  服务内部异常  
+```
+
+
+#### 停止拉流
+
+
+**停止拉流URL**
+
+schema://domain:port/v1/unplay
+
+```
+schema: http或者https
+method: POST
+content-type: json
+```
+
+
+**请求参数**
+
+
+```
+{
+  streamurl: 'rtmp://domain/live/streamid',
+  sessionid:string // 拉流时返回的唯一id
+}
+```
+
+**HTTP响应码**
+
+```
+200:  正常影响
+400:  请求不正确，URL 或者 参数不正确
+403:  鉴权失败
+404:  该流不存在
+500:  服务内部异常  
+```
+
+
+
+
+## WebRTC 推流设计
+
+
+#### 推流
+
+
+**推流URL**
+
+
+schema://domain:port/v1/publish
+
+```
+schema: http或者https
+method: POST
+content-type: json
+```
+
+
+**请求参数**
+
+
+```
+{
+  streamurl: 'rtmp://domain/live/streamid',
+  sdp: string,  // offer sdp
+  clientip: string // 可选项， 在实际接入过程中，该请求有可能是服务端发起，为了更好的做就近调度，可以把客户端的ip地址当做参数，如果没有此clientip参数，CDN放可以用请求方的ip来做就近接入。
 }
 ```
 
 
-HTTP响应码：
+**HTTP响应**
+
+```
+{
+  sdp:string,   // answer sdp 
+  sessionid:string // 该路推流的唯一id
+}
+```
+
+
+**HTTP响应码**
+
 
 ```
 200:  正常影响
@@ -58,73 +151,72 @@ HTTP响应码：
 ```
 
 
-## 拉流设计
 
 
+#### 停止推流
 
-WebRTC协议接入URL参考RTMP协议
 
-####  拉流URL
+**停止推流URL**
 
-URL: schema://domain:port/app/stream
+schema://domain:port/v1/unpublish
 
 ```
 schema: http或者https
-app：跟rtmp协议中app对齐
-stream: 跟rtmp协议中的stream对齐
-```
-
-HTTP请求：
-
 method: POST
-body: 使用json编码
+content-type: json
+```
+
+
+**请求参数**
 
 
 ```
 {
-  type:"play",
-  sdp:string   // offer sdp
+  streamurl: 'rtmp://domain/live/streamid',
+  sessionid:string // 推流时返回的唯一id
 }
 ```
 
-HTTP响应：
-
-```
-{
-  sdp:string   // answer sdp 
-}
-```
-
-
-HTTP响应码：
+**HTTP响应码**
 
 ```
 200:  正常影响
 400:  请求不正确，URL 或者 参数不正确
 403:  鉴权失败
-404:  该流不存在  
+404:  该流不存在
+500:  服务内部异常  
 ```
+
 
 
 ## 鉴权设计
 
-URL: schema://domain:port/app/stream?query=xxxxxx
+URL: schema://domain/v1/publish?token=xxxxxx
 
-推拉流的URL应当支持query参数， WebRTC-CDN中可以根据响应的query参数来做鉴权
+推拉流的URL应当支持token或者其他的query参数， WebRTC-CDN中可以根据请求的token或者query参数来做鉴权
+
+
 
 
 ## 状态上报设计
 
+
 为了方便CDN调式定位流出现的问题，需要定时上报流的状态，状态上报设计为可选
 
 
-状态上报URL:  schema://domain:port/app/stream
+**状态上报URL**
+
+schema://domain:port/v1/stream
 
 
-HTTP请求：
-
+```
+schema: http或者https
 method: POST
-body: 使用json编码
+content-type: json
+```
+
+
+**请求参数**
 
 
 ```
@@ -134,16 +226,11 @@ body: 使用json编码
 ```
 
 
-## 调度设计
-
-TBD
-
-
 
 ## 与RTMP的互通
 
 在设计的WebRTC的时候要考虑到对接原有的RTMP系统， WebRTC-CDN URL Schema 设计为与RTMP一致。 如果想要WebRTC系统和RTMP系统进行互通，CDN需要做音频的转码重采样和协议的转封装。
-在上行的WebRTC下行RTMP的时候，CDN需要把opus编码的音频转码为aac, WebRTC的的opus默认为48k采样率，RTMP中的AAC大多是44.1k采样率，这里需要重采样。相反RTMP协议转封装为WebRTC的过程中，
+在上行WebRTC下行RTMP的时候，CDN需要把opus编码的音频转码为aac, WebRTC的的opus默认为48k采样率，RTMP中的AAC大多是44.1k采样率，这里需要重采样。相反RTMP协议转封装为WebRTC的过程中，
 需要把aac转码为opus， 并做重采样。
 
 
