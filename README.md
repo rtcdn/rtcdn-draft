@@ -7,7 +7,7 @@ WebRTC 低延迟直播CDN集成规范
 
 ## 编解码能力
 
-WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑到跟RTMP互通, 视频编解码码限定支持H264 Baseline, 音频编解码限定支持OPUS.
+WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑到跟RTMP互通, 视频编解码码限定支持H264, 音频编解码限定支持OPUS.
 
 
 
@@ -15,14 +15,14 @@ WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑�
 
 在WebRTC拉流的时候， 上行有可能是RTMP/WebRTC或者其他的协议，此部分以上行为RTMP输入为准进行设计。
 
-如果上行为WebRTC， 下文中的streamurl可以做响应的改动，比如`webrtc://domain/live/streamid`
+如果上行为WebRTC， 下文中的streamurl可以做响应的改动，比如`webrtc://domain/app/stream`
 
 
 ### 拉流
 
 **拉流URL**
 
-schema://domain:port/v1/play
+schema://domain:port/rtc/v1/play
 
 ```
 schema: http或者https
@@ -35,7 +35,7 @@ content-type: json
 
 ```
 {
-  streamurl: 'rtmp://domain/live/streamid',
+  streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
   clientip: string // 可选项， 在实际接入过程中，拉流请求有可能是服务端发起，为了更好的做就近调度，可以把客户端的ip地址当做参数，如果没有此clientip参数，CDN放可以用请求方的ip来做就近接入。
 }
@@ -68,7 +68,7 @@ content-type: json
 
 **停止拉流URL**
 
-schema://domain:port/v1/unplay
+schema://domain:port/rtc/v1/unplay
 
 ```
 schema: http或者https
@@ -82,7 +82,7 @@ content-type: json
 
 ```
 {
-  streamurl: 'rtmp://domain/live/streamid',
+  streamurl: 'webrtc://domain/app/stream',
   sessionid:string // 拉流时返回的唯一id
 }
 ```
@@ -109,7 +109,7 @@ content-type: json
 **推流URL**
 
 
-schema://domain:port/v1/publish
+schema://domain:port/rtc/v1/publish
 
 ```
 schema: http或者https
@@ -123,7 +123,7 @@ content-type: json
 
 ```
 {
-  streamurl: 'rtmp://domain/live/streamid',
+  streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
   clientip: string // 可选项， 在实际接入过程中，该请求有可能是服务端发起，为了更好的做就近调度，可以把客户端的ip地址当做参数，如果没有此clientip参数，CDN放可以用请求方的ip来做就近接入。
 }
@@ -158,7 +158,7 @@ content-type: json
 
 **停止推流URL**
 
-schema://domain:port/v1/unpublish
+schema://domain:port/rtc/v1/unpublish
 
 ```
 schema: http或者https
@@ -172,7 +172,7 @@ content-type: json
 
 ```
 {
-  streamurl: 'rtmp://domain/live/streamid',
+  streamurl: 'webrtc://domain/app/stream',
   sessionid:string // 推流时返回的唯一id
 }
 ```
