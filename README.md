@@ -7,8 +7,11 @@ WebRTC 低延迟直播CDN集成规范
 
 ## 编解码能力
 
-WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。考虑到跟RTMP互通, 视频编解码码限定支持H264, 音频编解码限定支持OPUS.
+WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。
 
+考虑到跟RTMP互通, 视频编解码码限定支持H264, 音频编解码限定支持OPUS。
+
+其中H264不支持B帧。
 
 
 ## WebRTC 拉流设计
@@ -33,7 +36,7 @@ content-type: json
 **请求参数**
 
 
-```
+```json
 {
   streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
@@ -45,14 +48,18 @@ content-type: json
 
 **HTTP响应**
 
-```
+```json
 {
-  sdp:string,   // answer sdp 
-  sessionid:string // 该路下行的唯一id
+  code: int,
+  msg:  string,
+  data: {
+    sdp:string,   // answer sdp 
+    sessionid:string // 该路下行的唯一id
+  }
 }
 ```
 
-**HTTP响应码**
+**HTTP响应code码**
 
 ```
 200:  正常影响
@@ -70,7 +77,7 @@ content-type: json
 
 schema://domain:port/rtc/v1/unplay
 
-```
+```json
 schema: http或者https
 method: POST
 content-type: json
@@ -80,14 +87,18 @@ content-type: json
 **请求参数**
 
 
-```
+```json
 {
-  streamurl: 'webrtc://domain/app/stream',
-  sessionid:string // 拉流时返回的唯一id
+  code:int,
+  msg:string,
+  data:{
+    streamurl: 'webrtc://domain/app/stream',
+    sessionid:string // 拉流时返回的唯一id
+  }
 }
 ```
 
-**HTTP响应码**
+**HTTP响应code码**
 
 ```
 200:  正常影响
@@ -111,7 +122,7 @@ content-type: json
 
 schema://domain:port/rtc/v1/publish
 
-```
+```json
 schema: http或者https
 method: POST
 content-type: json
@@ -121,7 +132,7 @@ content-type: json
 **请求参数**
 
 
-```
+```json
 {
   streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
@@ -132,15 +143,19 @@ content-type: json
 
 **HTTP响应**
 
-```
+```json
 {
-  sdp:string,   // answer sdp 
-  sessionid:string // 该路推流的唯一id
+  code:int,
+  msg:string,
+  data:{
+    sdp:string,   // answer sdp 
+    sessionid:string // 该路推流的唯一id
+  }
 }
 ```
 
 
-**HTTP响应码**
+**HTTP响应code 码**
 
 
 ```
@@ -160,7 +175,7 @@ content-type: json
 
 schema://domain:port/rtc/v1/unpublish
 
-```
+```json
 schema: http或者https
 method: POST
 content-type: json
@@ -170,14 +185,24 @@ content-type: json
 **请求参数**
 
 
-```
+```json
 {
   streamurl: 'webrtc://domain/app/stream',
   sessionid:string // 推流时返回的唯一id
 }
 ```
 
-**HTTP响应码**
+
+**HTTP响应**
+
+```json
+{
+  code:int,
+  msg:string
+}
+```
+
+**HTTP响应code码**
 
 ```
 200:  正常影响
@@ -209,7 +234,7 @@ URL: schema://domain/v1/publish?token=xxxxxx
 schema://domain:port/v1/stream
 
 
-```
+```json
 schema: http或者https
 method: POST
 content-type: json
@@ -219,12 +244,11 @@ content-type: json
 **请求参数**
 
 
-```
+```json
 {
   stats:json   // stats from peerconnection.getStats
 }
 ```
-
 
 
 ## 与RTMP的互通
