@@ -9,9 +9,9 @@ WebRTC 低延迟直播CDN集成规范
 
 WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。
 
-考虑到跟RTMP互通, 视频编解码码限定支持H264, 音频编解码限定支持OPUS。
+考虑到跟RTMP互通, 视频编解码码限定支持`H264`, 音频编解码限定支持`OPUS`。
 
-其中H264不支持B帧。
+其中`H264`不支持B帧。
 
 
 ## WebRTC 拉流设计
@@ -25,7 +25,7 @@ WebRTC目前视频编解码支持VP8/VP9/H264,  音频默认支持OPUS。
 
 **拉流URL**
 
-schema://domain:port/rtc/v1/play
+`schema://domain:port/rtc/v1/play`
 
 ```
 schema: http或者https
@@ -75,7 +75,7 @@ content-type: json
 
 **停止拉流URL**
 
-schema://domain:port/rtc/v1/unplay
+`schema://domain:port/rtc/v1/unplay`
 
 ```json
 schema: http或者https
@@ -120,7 +120,7 @@ content-type: json
 **推流URL**
 
 
-schema://domain:port/rtc/v1/publish
+`schema://domain:port/rtc/v1/publish`
 
 ```json
 schema: http或者https
@@ -173,7 +173,7 @@ content-type: json
 
 **停止推流URL**
 
-schema://domain:port/rtc/v1/unpublish
+`schema://domain:port/rtc/v1/unpublish`
 
 ```json
 schema: http或者https
@@ -216,7 +216,7 @@ content-type: json
 
 ## 鉴权设计
 
-URL: schema://domain/v1/publish?token=xxxxxx
+URL: `schema://domain/v1/publish?token=xxxxxx`
 
 推拉流的URL应当支持token或者其他的query参数， WebRTC-CDN中可以根据请求的token或者query参数来做鉴权
 
@@ -231,7 +231,7 @@ URL: schema://domain/v1/publish?token=xxxxxx
 
 **状态上报URL**
 
-schema://domain:port/v1/stream
+`schema://domain:port/v1/stream`
 
 
 ```json
