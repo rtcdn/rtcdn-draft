@@ -36,7 +36,7 @@ content-type: json
 **请求参数**
 
 
-```json
+```
 {
   streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
@@ -48,7 +48,7 @@ content-type: json
 
 **HTTP响应**
 
-```json
+```
 {
   code: int,
   msg:  string,
@@ -77,7 +77,7 @@ content-type: json
 
 `schema://domain:port/rtc/v1/unplay`
 
-```json
+```
 schema: http或者https
 method: POST
 content-type: json
@@ -87,7 +87,7 @@ content-type: json
 **请求参数**
 
 
-```json
+```
 {
   code:int,
   msg:string,
@@ -122,7 +122,7 @@ content-type: json
 
 `schema://domain:port/rtc/v1/publish`
 
-```json
+```
 schema: http或者https
 method: POST
 content-type: json
@@ -132,7 +132,7 @@ content-type: json
 **请求参数**
 
 
-```json
+```
 {
   streamurl: 'webrtc://domain/app/stream',
   sdp: string,  // offer sdp
@@ -143,7 +143,7 @@ content-type: json
 
 **HTTP响应**
 
-```json
+```
 {
   code:int,
   msg:string,
@@ -175,7 +175,7 @@ content-type: json
 
 `schema://domain:port/rtc/v1/unpublish`
 
-```json
+```
 schema: http或者https
 method: POST
 content-type: json
@@ -185,7 +185,7 @@ content-type: json
 **请求参数**
 
 
-```json
+```
 {
   streamurl: 'webrtc://domain/app/stream',
   sessionid:string // 推流时返回的唯一id
@@ -195,7 +195,7 @@ content-type: json
 
 **HTTP响应**
 
-```json
+```
 {
   code:int,
   msg:string
@@ -234,7 +234,7 @@ URL: `schema://domain/v1/publish?token=xxxxxx`
 `schema://domain:port/v1/stream`
 
 
-```json
+```
 schema: http或者https
 method: POST
 content-type: json
@@ -244,7 +244,7 @@ content-type: json
 **请求参数**
 
 
-```json
+```
 {
   stats:json   // stats from peerconnection.getStats
 }
