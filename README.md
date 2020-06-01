@@ -1,7 +1,7 @@
 # rtcdn-draft
 
 
-WebRTC 低延迟直播CDN集成规范
+WebRTC 低延迟直播CDN集成规范草案 
 
 
 
